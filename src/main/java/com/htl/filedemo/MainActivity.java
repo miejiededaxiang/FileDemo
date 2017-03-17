@@ -56,9 +56,10 @@ public class MainActivity extends AppCompatActivity {
 				if (checkMounted) {
 
 					File file = new File(path);
-// 创建的是文件夹，
-// 报java.io.FileNotFoundException: /storage/emulated/0/htl.text: open failed: EISDIR (Is a directory)
-//					file.mkdirs();
+					// 创建的是文件夹，
+					// 报java.io.FileNotFoundException: /storage/emulated/0/htl.text:
+					// open failed: EISDIR (Is a directory)
+					//file.mkdirs();
 					file.getParentFile().mkdirs();
 
 					try {
