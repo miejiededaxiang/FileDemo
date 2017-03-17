@@ -13,13 +13,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
 	private static final String TAG = "MainActivity";
 	private Object mExternalStorageDirectory;
 
-	private Button mBtnInput, mBtnOutput;
+	private Button mBtnInput, mBtnOutput, mBtnRR;
 
 	private String content = "今天天气真好";
 	String path = Environment.getExternalStorageDirectory() + File.separator + "htl.text";
@@ -60,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
 					// 报java.io.FileNotFoundException: /storage/emulated/0/htl.text:
 					// open failed: EISDIR (Is a directory)
 					//file.mkdirs();
-					file.getParentFile().mkdirs();
-
+					//file.getParentFile().mkdirs();//创建文件
+					//写入不需要创建文件
 					try {
 						byte[] bytes = content.getBytes();
 						fileOutputStream = new FileOutputStream(file);
@@ -110,11 +112,38 @@ public class MainActivity extends AppCompatActivity {
 				}
 			}
 		});
+
+		mBtnRR.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				try {
+					File file = new File(Environment.getExternalStorageDirectory() + File.separator + "htlt.text");
+					InputStream inputStream = new FileInputStream(new File(Environment.getExternalStorageDirectory() + File.separator + "htl.text"));
+					OutputStream outputStream = new FileOutputStream(file);
+
+					byte[] by = new byte[1024];
+					int len = 0;
+
+					while ((len = inputStream.read(by)) != -1) {
+						outputStream.write(by, 0, len);
+					}
+					Toast.makeText(MainActivity.this, "读写成功", Toast.LENGTH_SHORT).show();
+					inputStream.close();
+					outputStream.close();
+
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	private void initView() {
 		mBtnInput = (Button) findViewById(R.id.btn_input);
 		mBtnOutput = (Button) findViewById(R.id.btn_output);
+		mBtnRR = (Button) findViewById(R.id.btn_rr);
 	}
 
 	/**
