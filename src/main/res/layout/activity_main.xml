@@ -27,5 +27,29 @@
         android:id="@+id/btn_rr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="读写"/>
+        android:text="字节流读写"/>
+
+    <Button
+        android:id="@+id/btn_rw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="字符流读写"/>
+
+    <Button
+        android:id="@+id/btn_sc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="字节流转字符流"/>
+
+    <Button
+        android:id="@+id/btn_buffer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="缓冲流"/>
+
+    <Button
+        android:id="@+id/btn_ser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="序列化"/>
 </LinearLayout>
