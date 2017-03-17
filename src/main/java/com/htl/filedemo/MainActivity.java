@@ -4,9 +4,14 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
@@ -14,10 +19,18 @@ public class MainActivity extends AppCompatActivity {
 	private static final String TAG = "MainActivity";
 	private Object mExternalStorageDirectory;
 
+	private Button mBtnInput, mBtnOutput;
+
+	private String content = "今天天气真好";
+	String path = Environment.getExternalStorageDirectory() + File.separator + "htl.text";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		initView();
+		listener();
 
 		//是否挂载SDcard
 		boolean isMounted = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
@@ -28,7 +41,79 @@ public class MainActivity extends AppCompatActivity {
 //		totalDirs();
 //		SystemDris();
 
-		sdcardDris();
+//		sdcardDris();
+	}
+
+	/**
+	 * 读写文件
+	 */
+	private void listener() {
+		mBtnOutput.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				boolean checkMounted = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+				FileOutputStream fileOutputStream = null;
+				if (checkMounted) {
+
+					File file = new File(path);
+// 创建的是文件夹，
+// 报java.io.FileNotFoundException: /storage/emulated/0/htl.text: open failed: EISDIR (Is a directory)
+//					file.mkdirs();
+					file.getParentFile().mkdirs();
+
+					try {
+						byte[] bytes = content.getBytes();
+						fileOutputStream = new FileOutputStream(file);
+						fileOutputStream.write(bytes);
+						Toast.makeText(MainActivity.this, "写入成功", Toast.LENGTH_SHORT).show();
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} finally {
+						if (fileOutputStream != null) {
+							try {
+								fileOutputStream.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			}
+		});
+
+		mBtnInput.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FileInputStream inputStream = null;
+				File file = new File(path);
+				try {
+					inputStream = new FileInputStream(file);
+					byte[] bytes = new byte[inputStream.available()];
+					inputStream.read(bytes);
+					String str = new String(bytes);
+					Log.d(TAG, "onClick: " + str);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					if (inputStream != null) {
+						try {
+							inputStream.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		});
+	}
+
+	private void initView() {
+		mBtnInput = (Button) findViewById(R.id.btn_input);
+		mBtnOutput = (Button) findViewById(R.id.btn_output);
 	}
 
 	/**
