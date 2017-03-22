@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -68,15 +69,22 @@ public class MainActivity extends AppCompatActivity {
 			public void onClick(View v) {
 				String wriPath = Environment.getExternalStorageDirectory() + File.separator + "htll.text";
 				Student student = new Student("小名", 21);
+				Log.d(TAG, "onClick:1 "+student.toString());
 				try {
-//					ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(wriPath));
+
+					ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(path));
 					ObjectOutputStream objectoutputStream = new ObjectOutputStream(new FileOutputStream(path));
 
 					objectoutputStream.writeObject(student);
+					Toast.makeText(MainActivity.this, "序列化成功", Toast.LENGTH_SHORT).show();
+
+					Student student2 = (Student) objectInputStream.readObject();
+					Log.d(TAG, "onClick: "+student2.toString());
+					objectInputStream.close();
 					objectoutputStream.close();
-
-
 				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				}
 			}

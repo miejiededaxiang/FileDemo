@@ -16,6 +16,7 @@ class Student implements Serializable {
 
 
 	public Student(String name, int age) {
+		super();
 		this.name = name;
 		this.age = age;
 	}
@@ -43,6 +44,7 @@ class Student implements Serializable {
 
 	@Override
 	public String toString() {
-		return "该学生的名字为：" + name + "，年龄为：" + age;
+
+		return name+age;
 	}
 }
